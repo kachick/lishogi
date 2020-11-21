@@ -60,10 +60,10 @@ final class JsonView(
         "timeControl" -> (c.timeControl match {
           case TimeControl.Clock(clock) =>
             Json.obj(
-              "type"      -> "clock",
-              "limit"     -> clock.limitSeconds,
-              "increment" -> clock.incrementSeconds,
-              "show"      -> clock.show
+              "type"    -> "clock",
+              "limit"   -> clock.limitSeconds,
+              "byoyomi" -> clock.byoyomiSeconds,
+              "show"    -> clock.show
             )
           case TimeControl.Correspondence(d) =>
             Json.obj(

@@ -302,7 +302,7 @@ final class GameApiV2(
       .add("clock" -> g.clock.map { clock =>
         Json.obj(
           "initial"   -> clock.limitSeconds,
-          "increment" -> clock.incrementSeconds,
+          "byoyomi"   -> clock.byoyomiSeconds,
           "totalTime" -> clock.estimateTotalSeconds
         )
       })

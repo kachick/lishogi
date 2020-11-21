@@ -36,8 +36,8 @@ class ClockTest extends ChessTest {
     "with time" in {
       Clock(60, 10).limitSeconds must_== 60
     }
-    "with increment" in {
-      Clock(60, 10).incrementSeconds must_== 10
+    "with byoyomi" in {
+      Clock(60, 10).byoyomiSeconds must_== 10
     }
     "with few time" in {
       Clock(0, 10).limitSeconds must_== 0

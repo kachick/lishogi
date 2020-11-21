@@ -101,19 +101,19 @@ object JsonView {
 
   implicit val clockWriter: OWrites[Clock] = OWrites { c =>
     Json.obj(
-      "running"   -> c.isRunning,
-      "initial"   -> c.limitSeconds,
-      "increment" -> c.incrementSeconds,
-      "white"     -> c.remainingTime(Color.White).toSeconds,
-      "black"     -> c.remainingTime(Color.Black).toSeconds,
-      "emerg"     -> c.config.emergSeconds
+      "running" -> c.isRunning,
+      "initial" -> c.limitSeconds,
+      "byoyomi" -> c.byoyomiSeconds,
+      "white"   -> c.remainingTime(Color.White).toSeconds,
+      "black"   -> c.remainingTime(Color.Black).toSeconds,
+      "emerg"   -> c.config.emergSeconds
     )
   }
 
   implicit val correspondenceWriter: OWrites[CorrespondenceClock] = OWrites { c =>
     Json.obj(
       "daysPerTurn" -> c.daysPerTurn,
-      "increment"   -> c.increment,
+      "byoyomi"     -> c.byoyomi,
       "white"       -> c.whiteTime,
       "black"       -> c.blackTime
     )

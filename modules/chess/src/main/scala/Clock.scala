@@ -73,19 +73,16 @@ case class Clock(
         val moveTime = (elapsed - lagComp) nonNeg
 
         val clockActive = gameActive && moveTime < player.remaining
-        val inc         = clockActive ?? player.increment
+        val byo         = clockActive ?? player.byoyomi
 
         val newC = updatePlayer(color) {
-          _.takeTime(moveTime - inc)
+          _.takeTime(moveTime - byo)
             .copy(lag = lagTrack)
         }
 
         if (clockActive) newC else newC.hardStop
       }
     }).switch
-
-  // To do: safely add this to takeback to remove inc from player.
-  // def deinc = updatePlayer(color, _.giveTime(-incrementOf(color)))
 
   def takeback = switch
 
@@ -99,7 +96,7 @@ case class Clock(
       _.setRemaining(centis)
     }
 
-  def incrementOf(c: Color) = players(c).increment
+  def byoyomiOf(c: Color) = players(c).byoyomi
 
   def goBerserk(c: Color) = updatePlayer(c) { _.copy(berserk = true) }
 
@@ -113,8 +110,8 @@ case class Clock(
 
   def estimateTotalSeconds = config.estimateTotalSeconds
   def estimateTotalTime    = config.estimateTotalTime
-  def increment            = config.increment
-  def incrementSeconds     = config.incrementSeconds
+  def byoyomi              = config.byoyomi
+  def byoyomiSeconds       = config.byoyomiSeconds
   def limit                = config.limit
   def limitInMinutes       = config.limitInMinutes
   def limitSeconds         = config.limitSeconds
@@ -143,7 +140,7 @@ case class ClockPlayer(
 
   def setRemaining(t: Centis) = copy(elapsed = limit - t)
 
-  def increment = if (berserk) Centis(0) else config.increment
+  def byoyomi = if (berserk) Centis(0) else config.byoyomi
 }
 
 object ClockPlayer {
@@ -158,19 +155,19 @@ object Clock {
   private val limitFormatter = new DecimalFormat("#.##")
 
   // All unspecified durations are expressed in seconds
-  case class Config(limitSeconds: Int, incrementSeconds: Int) {
+  case class Config(limitSeconds: Int, byoyomiSeconds: Int) {
 
-    def berserkable = incrementSeconds == 0 || limitSeconds > 0
+    def berserkable = byoyomiSeconds == 0 || limitSeconds > 0
 
     def emergSeconds = math.min(60, math.max(10, limitSeconds / 8))
 
-    def estimateTotalSeconds = limitSeconds + 40 * incrementSeconds
+    def estimateTotalSeconds = limitSeconds + 40 * byoyomiSeconds
 
     def estimateTotalTime = Centis.ofSeconds(estimateTotalSeconds)
 
-    def hasIncrement = incrementSeconds > 0
+    def hasByoyomi = byoyomiSeconds > 0
 
-    def increment = Centis.ofSeconds(incrementSeconds)
+    def byoyomi = Centis.ofSeconds(byoyomiSeconds)
 
     def limit = Centis.ofSeconds(limitSeconds)
 
@@ -190,14 +187,14 @@ object Clock {
 
     def show = toString
 
-    override def toString = s"$limitString+$incrementSeconds"
+    override def toString = s"$limitString+$byoyomiSeconds"
 
     def berserkPenalty =
-      if (limitSeconds < 40 * incrementSeconds) Centis(0)
+      if (limitSeconds < 40 * byoyomiSeconds) Centis(0)
       else Centis(limitSeconds * (100 / 2))
 
     def initTime = {
-      if (limitSeconds == 0) increment atLeast Centis(300)
+      if (limitSeconds == 0) byoyomi atLeast Centis(300)
       else limit
     }
   }
@@ -205,15 +202,15 @@ object Clock {
   // [TimeControl "600+2"] -> 10+2
   def readPgnConfig(str: String): Option[Config] =
     str.split('+') match {
-      case Array(initStr, incStr) =>
+      case Array(initStr, byoStr) =>
         for {
           init <- parseIntOption(initStr)
-          inc  <- parseIntOption(incStr)
-        } yield Config(init, inc)
+          byo  <- parseIntOption(byoStr)
+        } yield Config(init, byo)
       case _ => none
     }
 
-  def apply(limit: Int, increment: Int): Clock = apply(Config(limit, increment))
+  def apply(limit: Int, byoyomi: Int): Clock = apply(Config(limit, byoyomi))
 
   def apply(config: Config): Clock = {
     val player = ClockPlayer.withConfig(config)

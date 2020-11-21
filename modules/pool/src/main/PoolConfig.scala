@@ -28,7 +28,7 @@ object PoolConfig {
     Json.obj(
       "id"   -> p.id.value,
       "lim"  -> p.clock.limitInMinutes,
-      "inc"  -> p.clock.incrementSeconds,
+      "byo"  -> p.clock.byoyomiSeconds,
       "perf" -> p.perfType.trans(lila.i18n.defaultLang)
     )
   }
