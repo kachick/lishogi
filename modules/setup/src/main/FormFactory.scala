@@ -21,14 +21,14 @@ final class FormFactory {
 
   lazy val ai = Form(
     mapping(
-      "variant"   -> aiVariants,
-      "timeMode"  -> timeMode,
-      "time"      -> time,
-      "increment" -> byoyomi,
-      "days"      -> days,
-      "level"     -> level,
-      "color"     -> color,
-      "fen"       -> fenField
+      "variant"  -> aiVariants,
+      "timeMode" -> timeMode,
+      "time"     -> time,
+      "byoyomi"  -> byoyomi,
+      "days"     -> days,
+      "level"    -> level,
+      "color"    -> color,
+      "fen"      -> fenField
     )(AiConfig.from)(_.>>)
       .verifying("invalidFen", _.validFen)
       .verifying("Can't play that time control from a position", _.timeControlFromPosition)
@@ -42,14 +42,14 @@ final class FormFactory {
   def friend(ctx: UserContext) =
     Form(
       mapping(
-        "variant"   -> variantWithFenAndVariants,
-        "timeMode"  -> timeMode,
-        "time"      -> time,
-        "increment" -> byoyomi,
-        "days"      -> days,
-        "mode"      -> mode(withRated = ctx.isAuth),
-        "color"     -> color,
-        "fen"       -> fenField
+        "variant"  -> variantWithFenAndVariants,
+        "timeMode" -> timeMode,
+        "time"     -> time,
+        "byoyomi"  -> byoyomi,
+        "days"     -> days,
+        "mode"     -> mode(withRated = ctx.isAuth),
+        "color"    -> color,
+        "fen"      -> fenField
       )(FriendConfig.from)(_.>>)
         .verifying("Invalid clock", _.validClock)
         .verifying("invalidFen", _.validFen)
@@ -64,7 +64,7 @@ final class FormFactory {
         "variant"     -> variantWithVariants,
         "timeMode"    -> timeMode,
         "time"        -> time,
-        "increment"   -> byoyomi,
+        "byoyomi"     -> byoyomi,
         "days"        -> days,
         "mode"        -> mode(ctx.isAuth),
         "ratingRange" -> optional(ratingRange),
@@ -78,7 +78,7 @@ final class FormFactory {
   lazy val boardApiHook = Form(
     mapping(
       "time"        -> time,
-      "increment"   -> byoyomi,
+      "byoyomi"     -> byoyomi,
       "variant"     -> optional(boardApiVariantKeys),
       "rated"       -> optional(boolean),
       "color"       -> optional(color),
@@ -109,8 +109,8 @@ final class FormFactory {
 
     private lazy val clock = "clock" -> optional(
       mapping(
-        "limit"     -> number.verifying(ApiConfig.clockLimitSeconds.contains _),
-        "increment" -> byoyomi
+        "limit"   -> number.verifying(ApiConfig.clockLimitSeconds.contains _),
+        "byoyomi" -> byoyomi
       )(chess.Clock.Config.apply)(chess.Clock.Config.unapply)
     )
 

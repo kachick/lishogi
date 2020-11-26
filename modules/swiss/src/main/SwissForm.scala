@@ -29,8 +29,8 @@ final class SwissForm(implicit mode: Mode) {
           )
         ),
         "clock" -> mapping(
-          "limit"     -> number.verifying(clockLimits.contains _),
-          "increment" -> number(min = 0, max = 600)
+          "limit"   -> number.verifying(clockLimits.contains _),
+          "byoyomi" -> number(min = 0, max = 300)
         )(ClockConfig.apply)(ClockConfig.unapply)
           .verifying("Invalid clock", _.estimateTotalSeconds > 0),
         "startsAt"      -> optional(inTheFuture(ISODateTimeOrTimestamp.isoDateTimeOrTimestamp)),
@@ -81,23 +81,18 @@ final class SwissForm(implicit mode: Mode) {
 
 object SwissForm {
 
-  val clockLimits: Seq[Int] = Seq(0, 15, 30, 45, 60, 90) ++ {
-    (120 to 420 by 60) ++ (600 to 1800 by 300) ++ (2400 to 10800 by 600)
+  val clockLimits: Seq[Int] = Seq(0) ++ {
+    (60 to 600 by 60) ++ (900 to 1800 by 300) ++ (2400 to 3600 by 600)
   }
 
   val clockLimitChoices = options(
     clockLimits,
-    l => s"${chess.Clock.Config(l, 0).limitString}${if (l <= 1) " minute" else " minutes"}"
+    l => s"${chess.Clock.Config(l, 0).limitString}${if (l == 1) " minute" else " minutes"}"
   )
 
   val roundIntervals: Seq[Int] =
     Seq(
       Swiss.RoundInterval.auto,
-      5,
-      10,
-      20,
-      30,
-      45,
       60,
       90,
       120,
@@ -120,7 +115,6 @@ object SwissForm {
     s =>
       if (s == Swiss.RoundInterval.auto) s"Automatic"
       else if (s == Swiss.RoundInterval.manual) s"Manually schedule each round"
-      else if (s < 60) s"$s seconds"
       else if (s < 3600) s"${s / 60} minute(s)"
       else if (s < 24 * 3600) s"${s / 3600} hour(s)"
       else s"${s / 24 / 3600} days(s)"
