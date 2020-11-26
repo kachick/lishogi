@@ -106,8 +106,8 @@ object crud {
         form3.group(form("clockTime"), raw("Clock time"), half = true)(
           form3.select(_, DataForm.clockTimeChoices)
         ),
-        form3.group(form("clockIncrement"), raw("Clock increment"), half = true)(
-          form3.select(_, DataForm.clockIncrementChoices)
+        form3.group(form("clockByoyomi"), raw("Clock byoyomi"), half = true)(
+          form3.select(_, DataForm.clockByoyomiChoices)
         )
       ),
       form3.split(

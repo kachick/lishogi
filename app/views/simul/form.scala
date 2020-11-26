@@ -56,8 +56,8 @@ object form {
               help = trans.simulClockHint().some,
               half = true
             )(form3.select(_, clockTimeChoices)),
-            form3.group(form("clockIncrement"), raw("Clock increment"), half = true)(
-              form3.select(_, clockIncrementChoices)
+            form3.group(form("clockByoyomi"), raw("Clock byoyomi"), half = true)(
+              form3.select(_, clockByoyomiChoices)
             )
           ),
           form3.split(

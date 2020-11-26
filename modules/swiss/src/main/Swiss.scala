@@ -56,7 +56,7 @@ case class Swiss(
   def perfLens                   = PerfPicker.mainOrDefault(speed, variant, none)
 
   def estimatedDuration: FiniteDuration = {
-    (clock.limit.toSeconds + clock.increment.toSeconds * 80 + 10) * settings.nbRounds
+    (clock.limit.toSeconds + clock.byoyomi.toSeconds * 80 + 10) * settings.nbRounds
   }.toInt.seconds
 
   def estimatedDurationString = {

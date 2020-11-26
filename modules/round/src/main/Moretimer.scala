@@ -38,7 +38,7 @@ final private class Moretimer(
       colors.foreach { c =>
         messenger.volatile(game, s"$c + ${duration.value.toSeconds} seconds")
       }
-      (game withClock newClock) ++ colors.map { Event.ClockInc(_, centis) }
+      (game withClock newClock) ++ colors.map { Event.ClockByo(_, centis) }
     }
 
   private def isAllowedByPrefs(game: Game): Fu[Boolean] =

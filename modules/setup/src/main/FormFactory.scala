@@ -24,7 +24,7 @@ final class FormFactory {
       "variant"   -> aiVariants,
       "timeMode"  -> timeMode,
       "time"      -> time,
-      "increment" -> increment,
+      "increment" -> byoyomi,
       "days"      -> days,
       "level"     -> level,
       "color"     -> color,
@@ -45,7 +45,7 @@ final class FormFactory {
         "variant"   -> variantWithFenAndVariants,
         "timeMode"  -> timeMode,
         "time"      -> time,
-        "increment" -> increment,
+        "increment" -> byoyomi,
         "days"      -> days,
         "mode"      -> mode(withRated = ctx.isAuth),
         "color"     -> color,
@@ -64,7 +64,7 @@ final class FormFactory {
         "variant"     -> variantWithVariants,
         "timeMode"    -> timeMode,
         "time"        -> time,
-        "increment"   -> increment,
+        "increment"   -> byoyomi,
         "days"        -> days,
         "mode"        -> mode(ctx.isAuth),
         "ratingRange" -> optional(ratingRange),
@@ -78,7 +78,7 @@ final class FormFactory {
   lazy val boardApiHook = Form(
     mapping(
       "time"        -> time,
-      "increment"   -> increment,
+      "increment"   -> byoyomi,
       "variant"     -> optional(boardApiVariantKeys),
       "rated"       -> optional(boolean),
       "color"       -> optional(color),
@@ -88,7 +88,7 @@ final class FormFactory {
         variant = v.flatMap(Variant.apply) | Variant.default,
         timeMode = TimeMode.RealTime,
         time = t,
-        increment = i,
+        byoyomi = i,
         days = 1,
         mode = chess.Mode(~r),
         color = lila.lobby.Color.orDefault(c),
@@ -110,7 +110,7 @@ final class FormFactory {
     private lazy val clock = "clock" -> optional(
       mapping(
         "limit"     -> number.verifying(ApiConfig.clockLimitSeconds.contains _),
-        "increment" -> increment
+        "increment" -> byoyomi
       )(chess.Clock.Config.apply)(chess.Clock.Config.unapply)
     )
 

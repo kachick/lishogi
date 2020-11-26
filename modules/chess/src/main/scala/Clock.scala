@@ -187,7 +187,7 @@ object Clock {
 
     def show = toString
 
-    override def toString = s"$limitString+$byoyomiSeconds"
+    override def toString = s"$limitString-$byoyomiSeconds"
 
     def berserkPenalty =
       if (limitSeconds < 40 * byoyomiSeconds) Centis(0)
@@ -201,7 +201,7 @@ object Clock {
 
   // [TimeControl "600+2"] -> 10+2
   def readPgnConfig(str: String): Option[Config] =
-    str.split('+') match {
+    str.split('-') match {
       case Array(initStr, byoStr) =>
         for {
           init <- parseIntOption(initStr)

@@ -174,7 +174,7 @@ object Tag {
     Tag(
       TimeControl,
       clock.fold("-") { c =>
-        s"${c.limit.roundSeconds}+${c.increment.roundSeconds}"
+        s"${c.limit.roundSeconds}+${c.byoyomi.roundSeconds}"
       }
     )
 }

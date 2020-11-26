@@ -260,8 +260,8 @@ final private class TourFields(form: Form[_], tour: Option[Tournament])(implicit
       form3.group(form("clockTime"), trans.clockInitialTime(), half = true)(
         form3.select(_, DataForm.clockTimeChoices, disabled = disabledAfterStart)
       ),
-      form3.group(form("clockIncrement"), trans.clockIncrement(), half = true)(
-        form3.select(_, DataForm.clockIncrementChoices, disabled = disabledAfterStart)
+      form3.group(form("clockByoyomi"), trans.clockIncrement(), half = true)(
+        form3.select(_, DataForm.clockByoyomiChoices, disabled = disabledAfterStart)
       )
     )
   def minutes =
