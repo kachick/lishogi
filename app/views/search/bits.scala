@@ -161,12 +161,12 @@ private object bits {
           )
         )
 
-      def clockIncrement =
+      def clockByoyomi =
         tr(
-          th(label(trans.clockIncrement())),
+          th(label(trans.clockByoyomi())),
           td(
-            div(cls := "half")(from(), " ", form3.select(form("clock")("incMin"), Query.clockIncs, "".some)),
-            div(cls := "half")(to(), " ", form3.select(form("clock")("incMax"), Query.clockIncs, "".some))
+            div(cls := "half")(from(), " ", form3.select(form("clock")("byoMin"), Query.clockIncs, "".some)),
+            div(cls := "half")(to(), " ", form3.select(form("clock")("byoMax"), Query.clockIncs, "".some))
           )
         )
 

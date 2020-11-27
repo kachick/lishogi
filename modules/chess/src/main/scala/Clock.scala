@@ -161,7 +161,7 @@ object Clock {
 
     def emergSeconds = math.min(60, math.max(10, limitSeconds / 8))
 
-    def estimateTotalSeconds = limitSeconds + 40 * byoyomiSeconds
+    def estimateTotalSeconds = limitSeconds + 60 * byoyomiSeconds
 
     def estimateTotalTime = Centis.ofSeconds(estimateTotalSeconds)
 
@@ -178,10 +178,6 @@ object Clock {
     def limitString: String =
       limitSeconds match {
         case l if l % 60 == 0 => (l / 60).toString
-        case 15 => "¼"
-        case 30 => "½"
-        case 45 => "¾"
-        case 90 => "1.5"
         case _  => limitFormatter.format(limitSeconds / 60d)
       }
 
@@ -190,11 +186,11 @@ object Clock {
     override def toString = s"$limitString-$byoyomiSeconds"
 
     def berserkPenalty =
-      if (limitSeconds < 40 * byoyomiSeconds) Centis(0)
-      else Centis(limitSeconds * (100 / 2))
+      if (byoyomiSeconds == 0) Centis(limitSeconds * (100 / 2))
+      else Centis(0)
 
     def initTime = {
-      if (limitSeconds == 0) byoyomi atLeast Centis(300)
+      if (limitSeconds == 0) byoyomi atLeast Centis(500)
       else limit
     }
   }

@@ -28,7 +28,7 @@ object user {
         turns,
         duration,
         clockTime,
-        clockIncrement,
+        clockByoyomi,
         source,
         perf,
         mode

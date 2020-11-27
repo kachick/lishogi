@@ -132,7 +132,7 @@ final private class SwissFields(form: Form[_])(implicit ctx: Context) {
       form3.group(form("clock.limit"), trans.clockInitialTime(), half = true)(
         form3.select(_, SwissForm.clockLimitChoices)
       ),
-      form3.group(form("clock.byoyomi"), trans.clockIncrement(), half = true)(
+      form3.group(form("clock.byoyomi"), trans.clockByoyomi(), half = true)(
         form3.select(_, TourForm.clockByoyomiChoices)
       )
     )

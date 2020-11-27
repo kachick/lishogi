@@ -107,9 +107,9 @@ private object bits {
             renderLabel(form("time"), trans.minutesPerSide()),
             renderSelect(form("time"), clockTimeChoices, (a, b) => a.replace(".0", "") == b)
           ),
-          div(cls := "increment_choice")(
-            renderLabel(form("increment"), trans.incrementInSeconds()),
-            renderSelect(form("increment"), clockIncrementChoices)
+          div(cls := "byoyomi_choice")(
+            renderLabel(form("byoyomi"), trans.byoyomiInSeconds()),
+            renderSelect(form("byoyomi"), clockByoyomiChoices)
           )
         )
       else
@@ -120,11 +120,11 @@ private object bits {
             span(chess.Clock.Config(~form("time").value.map(x => (x.toDouble * 60).toInt), 0).limitString),
             renderInput(form("time"))
           ),
-          div(cls := "increment_choice slider")(
-            trans.incrementInSeconds(),
+          div(cls := "byoyomi_choice slider")(
+            trans.byoyomiInSeconds(),
             ": ",
-            span(form("increment").value),
-            renderInput(form("increment"))
+            span(form("byoyomi").value),
+            renderInput(form("byoyomi"))
           )
         ),
       div(cls := "correspondence")(

@@ -32,12 +32,12 @@ object filter {
               td(renderCheckboxes(form, "speed", translatedSpeedChoices))
             ),
             tr(cls := "inline")(
-              td(trans.increment()),
+              td(trans.byoyomi()),
               td(
                 renderCheckboxes(
                   form,
-                  "increment",
-                  translatedIncrementChoices
+                  "byoyomi",
+                  translatedByoyomiChoices
                 )
               )
             ),
