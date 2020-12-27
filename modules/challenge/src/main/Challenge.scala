@@ -133,7 +133,7 @@ object Challenge {
     case class Clock(config: chess.Clock.Config) extends TimeControl {
       // All durations are expressed in seconds
       def limit     = config.limit
-      def increment = config.increment
+      def byoyomi   = config.byoyomi
       def show      = config.show
     }
   }

@@ -21,7 +21,7 @@ final class CrudApi(tournamentRepo: TournamentRepo) {
       name = tour.name,
       homepageHours = ~tour.spotlight.flatMap(_.homepageHours),
       clockTime = tour.clock.limitInMinutes,
-      clockIncrement = tour.clock.incrementSeconds,
+      clockByoyomi = tour.clock.byoyomiSeconds,
       minutes = tour.minutes,
       variant = tour.variant.id,
       position = tour.position.fen,
@@ -82,7 +82,7 @@ final class CrudApi(tournamentRepo: TournamentRepo) {
 
   private def updateTour(tour: Tournament, data: CrudForm.Data) = {
     import data._
-    val clock = chess.Clock.Config((clockTime * 60).toInt, clockIncrement)
+    val clock = chess.Clock.Config((clockTime * 60).toInt, clockByoyomi)
     tour.copy(
       name = name,
       clock = clock,

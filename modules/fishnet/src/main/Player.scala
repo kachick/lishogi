@@ -66,7 +66,7 @@ final class Player(
               Work.Clock(
                 wtime = clk.remainingTime(White).centis,
                 btime = clk.remainingTime(Black).centis,
-                inc = clk.incrementSeconds
+                byo = clk.byoyomiSeconds
               )
             },
             tries = 0,

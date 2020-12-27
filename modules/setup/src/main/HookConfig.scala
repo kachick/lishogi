@@ -10,7 +10,7 @@ case class HookConfig(
     variant: chess.variant.Variant,
     timeMode: TimeMode,
     time: Double,
-    increment: Int,
+    byoyomi: Int,
     days: Int,
     mode: Mode,
     color: Color,
@@ -45,7 +45,7 @@ case class HookConfig(
     )
 
   def >> =
-    (variant.id, timeMode.id, time, increment, days, mode.id.some, ratingRange.toString.some, color.name).some
+    (variant.id, timeMode.id, time, byoyomi, days, mode.id.some, ratingRange.toString.some, color.name).some
 
   def withTimeModeString(tc: Option[String]) =
     tc match {
@@ -98,7 +98,7 @@ case class HookConfig(
       variant = game.variant,
       timeMode = TimeMode ofGame game,
       time = game.clock.map(_.limitInMinutes) | time,
-      increment = game.clock.map(_.incrementSeconds) | increment,
+      byoyomi = game.clock.map(_.byoyomiSeconds) | byoyomi,
       days = game.daysPerTurn | days,
       mode = game.mode
     )
@@ -114,7 +114,7 @@ object HookConfig extends BaseHumanConfig {
       variant = chess.variant.Variant(v) err s"Invalid game variant $v",
       timeMode = TimeMode(tm) err s"Invalid time mode $tm",
       time = t,
-      increment = i,
+      byoyomi = i,
       days = d,
       mode = realMode,
       ratingRange = e.fold(RatingRange.default)(RatingRange.orDefault),
@@ -126,7 +126,7 @@ object HookConfig extends BaseHumanConfig {
     variant = variantDefault,
     timeMode = TimeMode.RealTime,
     time = 5d,
-    increment = 8,
+    byoyomi = 8,
     days = 2,
     mode = Mode.default,
     ratingRange = RatingRange.default,
@@ -143,7 +143,7 @@ object HookConfig extends BaseHumanConfig {
         variant = chess.variant.Variant orDefault (r int "v"),
         timeMode = TimeMode orDefault (r int "tm"),
         time = r double "t",
-        increment = r int "i",
+        byoyomi = r int "i",
         days = r int "d",
         mode = Mode orDefault (r int "m"),
         color = Color.Random,
@@ -155,7 +155,7 @@ object HookConfig extends BaseHumanConfig {
         "v"  -> o.variant.id,
         "tm" -> o.timeMode.id,
         "t"  -> o.time,
-        "i"  -> o.increment,
+        "b"  -> o.byoyomi,
         "d"  -> o.days,
         "m"  -> o.mode.id,
         "e"  -> o.ratingRange.toString

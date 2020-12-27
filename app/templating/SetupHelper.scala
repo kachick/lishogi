@@ -16,12 +16,8 @@ trait SetupHelper { self: I18nHelper =>
 
   val clockTimeChoices: List[SelectChoice] = List(
     ("0", "0", none),
-    ("0.25", "¼", none),
-    ("0.5", "½", none),
-    ("0.75", "¾", none)
   ) ::: List(
     "1",
-    "1.5",
     "2",
     "3",
     "4",
@@ -59,8 +55,8 @@ trait SetupHelper { self: I18nHelper =>
     (v.toString, v.toString, none)
   }
 
-  val clockIncrementChoices: List[SelectChoice] = {
-    (0 to 20).toList ::: List(25, 30, 35, 40, 45, 60, 90, 120, 150, 180)
+  val clockByoyomiChoices: List[SelectChoice] = {
+    (0 to 60 by 10).toList ::: List(90, 120, 150, 180)
   } map { s =>
     (s.toString, s.toString, none)
   }
@@ -92,7 +88,7 @@ trait SetupHelper { self: I18nHelper =>
       (Mode.Rated.id.toString, trans.rated.txt(), none)
     )
 
-  def translatedIncrementChoices(implicit lang: Lang) =
+  def translatedByoyomiChoices(implicit lang: Lang) =
     List(
       (1, trans.yes.txt(), none),
       (0, trans.no.txt(), none)

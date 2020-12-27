@@ -68,8 +68,8 @@ final class GamesByUsersStream(gameRepo: lila.game.GameRepo)(implicit
         .add("initialFen" -> initialFen)
         .add("clock" -> g.clock.map { clock =>
           Json.obj(
-            "initial"   -> clock.limitSeconds,
-            "increment" -> clock.incrementSeconds
+            "initial" -> clock.limitSeconds,
+            "byoyomi" -> clock.byoyomiSeconds
           )
         })
         .add("daysPerTurn" -> g.daysPerTurn)

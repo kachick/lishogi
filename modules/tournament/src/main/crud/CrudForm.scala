@@ -21,7 +21,7 @@ object CrudForm {
       "name"           -> text(minLength = 3, maxLength = 40),
       "homepageHours"  -> number(min = 0, max = maxHomepageHours),
       "clockTime"      -> numberInDouble(clockTimeChoices),
-      "clockIncrement" -> numberIn(clockIncrementChoices),
+      "clockByoyomi" -> numberIn(clockByoyomiChoices),
       "minutes"        -> number(min = 20, max = 1440),
       "variant"        -> number.verifying(Variant exists _),
       "position"       -> text.verifying(DataForm.positions contains _),
@@ -39,7 +39,7 @@ object CrudForm {
     name = "",
     homepageHours = 0,
     clockTime = clockTimeDefault,
-    clockIncrement = clockIncrementDefault,
+    clockByoyomi = clockByoyomiDefault,
     minutes = minuteDefault,
     variant = chess.variant.Standard.id,
     position = StartingPosition.initial.fen,
@@ -56,7 +56,7 @@ object CrudForm {
       name: String,
       homepageHours: Int,
       clockTime: Double,
-      clockIncrement: Int,
+      clockByoyomi: Int,
       minutes: Int,
       variant: Int,
       position: String,
@@ -71,11 +71,11 @@ object CrudForm {
 
     def realVariant = Variant orDefault variant
 
-    def validClock = (clockTime + clockIncrement) > 0
+    def validClock = (clockTime + clockByoyomi) > 0
 
     def validTiming = (minutes * 60) >= (3 * estimatedGameDuration)
 
-    private def estimatedGameDuration = 60 * clockTime + 30 * clockIncrement
+    private def estimatedGameDuration = 60 * (clockTime + clockByoyomi)
   }
 
   val imageChoices = List(

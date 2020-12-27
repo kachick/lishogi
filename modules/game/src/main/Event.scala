@@ -326,8 +326,8 @@ object Event {
     override def owner = true
   }
 
-  case class ClockInc(color: Color, time: Centis) extends Event {
-    def typ = "clockInc"
+  case class ClockByo(color: Color, time: Centis) extends Event {
+    def typ = "clockByo"
     def data =
       Json.obj(
         "color" -> color,

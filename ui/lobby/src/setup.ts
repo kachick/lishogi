@@ -30,11 +30,7 @@ export default class Setup {
 
   private sliderTimes = [
     0,
-    1 / 4,
-    1 / 2,
-    3 / 4,
     1,
-    3 / 2,
     2,
     3,
     4,
@@ -62,42 +58,27 @@ export default class Setup {
     60,
     75,
     90,
-    105,
-    120,
-    135,
-    150,
-    165,
-    180,
+    105
+  ];
+
+  private byoyomiTimes = [
+    0,
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    75,
+    90,
+    105
   ];
 
   private sliderTime = (v: number) =>
-    v < this.sliderTimes.length ? this.sliderTimes[v] : 180;
+    v < this.sliderTimes.length ? this.sliderTimes[v] : 120;
 
-  private sliderIncrement = (v: number) => {
-    if (v <= 20) return v;
-    switch (v) {
-      case 21:
-        return 25;
-      case 22:
-        return 30;
-      case 23:
-        return 35;
-      case 24:
-        return 40;
-      case 25:
-        return 45;
-      case 26:
-        return 60;
-      case 27:
-        return 90;
-      case 28:
-        return 120;
-      case 29:
-        return 150;
-      default:
-        return 180;
-    }
-  };
+  private sliderByoyomi = (v: number) =>
+    v < this.byoyomiTimes.length ? this.byoyomiTimes[v] : 120;
 
   private sliderDays = (v: number) => {
     if (v <= 3) return v;
@@ -128,7 +109,7 @@ export default class Setup {
         hash.variant == 1 &&
         hash.mode == 1 &&
         hash.timeMode == 1,
-      id = parseFloat(hash.time) + "+" + parseInt(hash.increment);
+      id = parseFloat(hash.time) + "+" + parseInt(hash.byoyomi);
     return valid && this.root.pools.find((p) => p.id === id)
       ? {
           id: id,
@@ -150,7 +131,7 @@ export default class Setup {
       $fenInput = $fenPosition.find("input"),
       forceFormPosition = !!$fenInput.val(),
       $timeInput = $form.find(".time_choice [name=time]"),
-      $incrementInput = $form.find(".increment_choice [name=increment]"),
+      $byoyomiInput = $form.find(".byoyomi_choice [name=byoyomi]"),
       $daysInput = $form.find(".days_choice [name=days]"),
       typ = $form.data("type"),
       $ratings = $modal.find(".ratings > div"),
@@ -161,10 +142,10 @@ export default class Setup {
           timeMode = $timeModeSelect.val(),
           rated = $rated.prop("checked"),
           limit = $timeInput.val(),
-          inc = $incrementInput.val(),
+          byo = $byoyomiInput.val(),
           // no rated variants with less than 30s on the clock
           cantBeRated =
-            (timeMode == "1" && variantId != "1" && limit < 0.5 && inc == 0) ||
+            (timeMode == "1" && variantId != "1" && limit < 0.5 && byo == 0) ||
             (variantId != "1" && timeMode != "1");
         if (cantBeRated && rated) {
           $casual.click();
@@ -174,7 +155,7 @@ export default class Setup {
           .prop("disabled", !!cantBeRated)
           .siblings("label")
           .toggleClass("disabled", cantBeRated);
-        const timeOk = timeMode != "1" || limit > 0 || inc > 0,
+        const timeOk = timeMode != "1" || limit > 0 || byo > 0,
           ratedOk = typ != "hook" || !rated || timeMode != "0",
           aiOk = typ != "ai" || variantId != "3" || limit >= 1;
         if (timeOk && ratedOk && aiOk) {
@@ -212,7 +193,7 @@ export default class Setup {
         case "1":
         case "3":
           if (timeMode == "1") {
-            const time = $timeInput.val() * 60 + $incrementInput.val() * 40;
+            const time = $timeInput.val() * 60 + $byoyomiInput.val() * 40;
             if (time < 30) key = "ultraBullet";
             else if (time < 180) key = "bullet";
             else if (time < 480) key = "blitz";
@@ -291,36 +272,30 @@ export default class Setup {
       });
     if (this.root.opts.blindMode) {
       $variantSelect.focus();
-      $timeInput.add($incrementInput).on("change", function () {
+      $timeInput.add($byoyomiInput).on("change", function () {
         toggleButtons();
         showRating();
       });
     } else
       li.slider().done(function () {
-        $timeInput.add($incrementInput).each(function (this: HTMLElement) {
+        $timeInput.add($byoyomiInput).each(function (this: HTMLElement) {
           const $input = $(this),
             $value = $input.siblings("span"),
             isTimeSlider = $input.parent().hasClass("time_choice"),
-            showTime = (v: number) => {
-              if (v == 1 / 4) return "¼";
-              if (v == 1 / 2) return "½";
-              if (v == 3 / 4) return "¾";
-              return v;
-            },
             valueToTime = (v: number) =>
-              (isTimeSlider ? self.sliderTime : self.sliderIncrement)(v),
+              (isTimeSlider ? self.sliderTime : self.sliderByoyomi)(v),
             show = (time: number) =>
-              $value.text(isTimeSlider ? showTime(time) : time);
+              $value.text(time);
           show(parseFloat($input.val()));
           $input.after(
             $("<div>").slider({
               value: self.sliderInitVal(
                 parseFloat($input.val()),
-                isTimeSlider ? self.sliderTime : self.sliderIncrement,
+                isTimeSlider ? self.sliderTime : self.sliderByoyomi,
                 100
               ),
               min: 0,
-              max: isTimeSlider ? 38 : 30,
+              max: isTimeSlider ? 30 : 10,
               range: "min",
               step: 1,
               slide: function (_, ui) {
@@ -383,7 +358,7 @@ export default class Setup {
     $timeModeSelect
       .on("change", function (this: HTMLElement) {
         var timeMode = $(this).val();
-        $form.find(".time_choice, .increment_choice").toggle(timeMode == "1");
+        $form.find(".time_choice, .byoyomi_choice").toggle(timeMode == "1");
         $form.find(".days_choice").toggle(timeMode == "2");
         toggleButtons();
         showRating();

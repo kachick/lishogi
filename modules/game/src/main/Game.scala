@@ -111,16 +111,16 @@ case class Game(
   def moveTimes(color: Color): Option[List[Centis]] = {
     for {
       clk <- clock
-      inc = clk.incrementOf(color)
+      byo = clk.byoyomiOf(color)
       history <- clockHistory
       clocks = history(color)
     } yield Centis(0) :: {
       val pairs = clocks.iterator zip clocks.iterator.drop(1)
 
-      // We need to determine if this color's last clock had inc applied.
+      // We need to determine if this color's last clock had byo applied.
       // if finished and history.size == playedTurns then game was ended
       // by a players move, such as with mate or autodraw. In this case,
-      // the last move of the game, and the only one without inc, is the
+      // the last move of the game, and the only one without byo, is the
       // last entry of the clock history for !turnColor.
       //
       // On the other hand, if history.size is more than playedTurns,
@@ -131,7 +131,7 @@ case class Game(
       pairs map {
         case (first, second) => {
             val d = first - second
-            if (pairs.hasNext || !noLastInc) d + inc else d
+            if (pairs.hasNext || !noLastInc) d + byo else d
           } nonNeg
       } toList
     }
@@ -256,12 +256,12 @@ case class Game(
 
   def correspondenceClock: Option[CorrespondenceClock] =
     daysPerTurn map { days =>
-      val increment   = days * 24 * 60 * 60
-      val secondsLeft = (movedAt.getSeconds + increment - nowSeconds).toInt max 0
+      val byoyomi   = days * 24 * 60 * 60
+      val secondsLeft = (movedAt.getSeconds + byoyomi - nowSeconds).toInt max 0
       CorrespondenceClock(
-        increment = increment,
-        whiteTime = turnColor.fold(secondsLeft, increment).toFloat,
-        blackTime = turnColor.fold(increment, secondsLeft).toFloat
+        byoyomi = byoyomi,
+        whiteTime = turnColor.fold(secondsLeft, byoyomi).toFloat,
+        blackTime = turnColor.fold(byoyomi, secondsLeft).toFloat
       )
     }
 
@@ -362,7 +362,7 @@ case class Game(
         ).updatePlayer(color, _.goBerserk)
       ) ++
         List(
-          Event.ClockInc(color, -c.config.berserkPenalty),
+          Event.ClockByo(color, -c.config.berserkPenalty),
           Event.Clock(newClock), // BC
           Event.Berserk(color)
         )

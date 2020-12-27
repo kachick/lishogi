@@ -15,8 +15,8 @@ private[setup] trait Config {
   // Clock time in minutes
   val time: Double
 
-  // Clock increment in seconds
-  val increment: Int
+  // Clock byoyomi in seconds
+  val byoyomi: Int
 
   // Correspondence days per turn
   val days: Int
@@ -38,12 +38,12 @@ private[setup] trait Config {
 
   def validClock = !hasClock || clockHasTime
 
-  def clockHasTime = time + increment > 0
+  def clockHasTime = time + byoyomi > 0
 
   def makeClock = hasClock option justMakeClock
 
   protected def justMakeClock =
-    Clock.Config((time * 60).toInt, if (clockHasTime) increment else 1)
+    Clock.Config((time * 60).toInt, if (clockHasTime) byoyomi else 1)
 
   def makeDaysPerTurn: Option[Int] = (timeMode == TimeMode.Correspondence) option days
 }
@@ -128,12 +128,11 @@ trait BaseConfig {
   val speeds = Speed.all.map(_.id)
 
   private val timeMin             = 0
-  private val timeMax             = 180
-  private val acceptableFractions = Set(1 / 4d, 1 / 2d, 3 / 4d, 3 / 2d)
+  private val timeMax             = 240
   def validateTime(t: Double) =
-    t >= timeMin && t <= timeMax && (t.isWhole || acceptableFractions(t))
+    t >= timeMin && t <= timeMax && t.isWhole
 
-  private val incrementMin      = 0
-  private val incrementMax      = 180
-  def validateIncrement(i: Int) = i >= incrementMin && i <= incrementMax
+  private val byoyomiMin      = 0
+  private val byoyomiMax      = 180
+  def validateByoyomi(i: Int) = i >= byoyomiMin && i <= byoyomiMax
 }

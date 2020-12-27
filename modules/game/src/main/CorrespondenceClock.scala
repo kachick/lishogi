@@ -4,20 +4,20 @@ import chess.Color
 
 // times are expressed in seconds
 case class CorrespondenceClock(
-    increment: Int,
+    byoyomi: Int,
     whiteTime: Float,
     blackTime: Float
 ) {
 
   import CorrespondenceClock._
 
-  def daysPerTurn = increment / 60 / 60 / 24
+  def daysPerTurn = byoyomi / 60 / 60 / 24
 
   def remainingTime(c: Color) = c.fold(whiteTime, blackTime)
 
   def outoftime(c: Color) = remainingTime(c) == 0
 
-  def moretimeable(c: Color) = remainingTime(c) < (increment - hourSeconds)
+  def moretimeable(c: Color) = remainingTime(c) < (byoyomi - hourSeconds)
 
   def giveTime(c: Color) =
     c.fold(
@@ -26,9 +26,9 @@ case class CorrespondenceClock(
     )
 
   // in seconds
-  def estimateTotalTime = increment * 40 / 2
+  def estimateTotalTime = byoyomi * 40 / 2
 
-  def incrementHours = increment / 60 / 60
+  def byoyomiHours = byoyomi / 60 / 60
 }
 
 private object CorrespondenceClock {

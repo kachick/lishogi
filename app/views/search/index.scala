@@ -54,7 +54,7 @@ object index {
             turns,
             duration,
             clockTime,
-            clockIncrement,
+            clockByoyomi,
             status,
             winnerColor,
             date,

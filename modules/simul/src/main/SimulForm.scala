@@ -10,17 +10,17 @@ import lila.common.Form._
 
 object SimulForm {
 
-  val clockTimes       = (5 to 15 by 5) ++ (20 to 90 by 10) ++ (120 to 180 by 20)
+  val clockTimes       = (5 to 30 by 5) ++ (40 to 60 by 10) ++ (75 to 120 by 15)
   val clockTimeDefault = 20
   val clockTimeChoices = options(clockTimes, "%d minute{s}")
 
-  val clockIncrements       = (0 to 2 by 1) ++ (3 to 7) ++ (10 to 30 by 5) ++ (40 to 60 by 10) ++ (90 to 180 by 30)
-  val clockIncrementDefault = 60
-  val clockIncrementChoices = options(clockIncrements, "%d second{s}")
+  val clockByoyomis       = (10 to 60 by 10) ++ (75 to 180 by 15)
+  val clockByoyomiDefault = 60
+  val clockByoyomiChoices = options(clockByoyomis, "%d second{s}")
 
-  val clockExtras       = (0 to 15 by 5) ++ (20 to 60 by 10) ++ (90 to 120 by 30)
+  val clockExtras       = (5 to 15 by 5) ++ (20 to 60 by 10) ++ (90 to 120 by 30)
   val clockExtraChoices = options(clockExtras, "%d minute{s}")
-  val clockExtraDefault = 0
+  val clockExtraDefault = 10
 
   val colors = List("white", "random", "black")
   val colorChoices = List(
@@ -62,10 +62,10 @@ object SimulForm {
   def create(host: User) =
     Form(
       mapping(
-        "name"           -> nameType(host),
-        "clockTime"      -> numberIn(clockTimeChoices),
-        "clockIncrement" -> numberIn(clockIncrementChoices),
-        "clockExtra"     -> numberIn(clockExtraChoices),
+        "name"         -> nameType(host),
+        "clockTime"    -> numberIn(clockTimeChoices),
+        "clockByoyomi" -> numberIn(clockByoyomiChoices),
+        "clockExtra"   -> numberIn(clockExtraChoices),
         "variants" -> list {
           number.verifying(
             Set(
@@ -89,7 +89,7 @@ object SimulForm {
     ) fill Setup(
       name = host.titleUsername,
       clockTime = clockTimeDefault,
-      clockIncrement = clockIncrementDefault,
+      clockByoyomi = clockByoyomiDefault,
       clockExtra = clockExtraDefault,
       variants = List(chess.variant.Standard.id),
       position = StartingPosition.initial.fen.some,
@@ -112,7 +112,7 @@ object SimulForm {
   case class Setup(
       name: String,
       clockTime: Int,
-      clockIncrement: Int,
+      clockByoyomi: Int,
       clockExtra: Int,
       variants: List[Int],
       position: Option[String],

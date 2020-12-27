@@ -31,13 +31,13 @@ object BSONHandlers {
       case doc: BSONDocument =>
         for {
           limit <- doc.getAsTry[Int]("limit")
-          inc   <- doc.getAsTry[Int]("increment")
+          inc   <- doc.getAsTry[Int]("byoyomi")
         } yield ClockConfig(limit, inc)
     },
     c =>
       BSONDocument(
-        "limit"     -> c.limitSeconds,
-        "increment" -> c.incrementSeconds
+        "limit"   -> c.limitSeconds,
+        "byoyomi" -> c.byoyomiSeconds
       )
   )
 

@@ -93,7 +93,7 @@ object BinaryFormat {
       config.limit - legacyElapsed
 
     def write(clock: Clock): ByteArray = {
-      Array(writeClockLimit(clock.limitSeconds), clock.incrementSeconds.toByte) ++
+      Array(writeClockLimit(clock.limitSeconds), clock.byoyomiSeconds.toByte) ++
         writeSignedInt24(legacyElapsed(clock, White).centis) ++
         writeSignedInt24(legacyElapsed(clock, Black).centis) ++
         clock.timer.fold(Array.empty[Byte])(writeTimer)
@@ -152,19 +152,10 @@ object BinaryFormat {
     private def readTimer(l: Int) =
       if (l != 0) Some(start + Centis(l)) else None
 
-    private def writeClockLimit(limit: Int): Byte = {
-      // The database expects a byte for a limit, and this is limit / 60.
-      // For 0.5+0, this does not give a round number, so there needs to be
-      // an alternative way to describe 0.5.
-      // The max limit where limit % 60 == 0, returns 180 for limit / 60
-      // So, for the limits where limit % 30 == 0, we can use the space
-      // from 181-255, where 181 represents 0.25 and 182 represents 0.50...
-      (if (limit % 60 == 0) limit / 60 else limit / 15 + 180).toByte
-    }
+    // The database stores limit as 1 byte (number of base minutes, 0-240).
+    private def writeClockLimit(limit: Int): Byte = (limit / 60).toByte
 
-    private def readClockLimit(i: Int) = {
-      if (i < 181) i * 60 else (i - 180) * 15
-    }
+    private def readClockLimit(i: Int) = i * 60
   }
 
   object clock {

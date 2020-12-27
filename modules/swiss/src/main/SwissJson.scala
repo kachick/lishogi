@@ -285,8 +285,8 @@ object SwissJson {
 
   implicit private val clockWrites: OWrites[chess.Clock.Config] = OWrites { clock =>
     Json.obj(
-      "limit"     -> clock.limitSeconds,
-      "increment" -> clock.incrementSeconds
+      "limit"   -> clock.limitSeconds,
+      "byoyomi" -> clock.byoyomiSeconds
     )
   }
 
