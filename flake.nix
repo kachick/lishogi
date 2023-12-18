@@ -30,7 +30,7 @@
               # https://stackoverflow.com/questions/74407083/how-can-i-synchronize-node-and-yarn-versions-in-my-nix-shell
               nodejs-18_x
               (yarn.override {
-                nodejs = null;
+                nodejs = nodejs-18_x;
               })
               mongosh
               sbt
