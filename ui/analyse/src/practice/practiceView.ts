@@ -1,8 +1,9 @@
 import { transWithColorName } from 'common/colorName';
-import { MaybeVNodes, bind } from 'common/snabbdom';
+import { bind, MaybeVNodes } from 'common/snabbdom';
+import { makeNotation } from 'common/notation';
 import { isHandicap } from 'shogiops/handicaps';
 import { Outcome } from 'shogiops/types';
-import { VNode, h } from 'snabbdom';
+import { h, VNode } from 'snabbdom';
 import AnalyseCtrl from '../ctrl';
 import { Comment, PracticeCtrl } from './practiceCtrl';
 
@@ -23,7 +24,7 @@ function commentBest(c: Comment, root: AnalyseCtrl, ctrl: PracticeCtrl): MaybeVN
               destroy: () => ctrl.commentShape(false),
             },
           },
-          c.best.usi
+          makeNotation(c.prev.sfen, root.data.game.variant.key, c.best.usi, c.prev.usi)
         )
       )
     : [];
@@ -54,7 +55,10 @@ function renderEnd(root: AnalyseCtrl, end: Outcome): VNode {
                 root.trans,
                 'xWinsGame',
                 end.winner,
-                isHandicap({ rules: root.data.game.variant.key, sfen: root.data.game.initialSfen })
+                isHandicap({
+                  rules: root.data.game.variant.key,
+                  sfen: root.data.game.initialSfen,
+                })
               )
             )
           )
